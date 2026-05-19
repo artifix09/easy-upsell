@@ -1,0 +1,32 @@
+{
+  "products": [
+    {
+      "id": 8174500839563,
+      "title": "Dev Store Product A",
+      "handle": "dev-store-product-a",
+      "vendor": "DevStore",
+      "tags": ["dev"],
+      "collection_ids": ["dev"],
+      "featured_image": null,
+      "price_cents": 3000,
+      "compare_at_price_cents": null,
+      "default_variant_id": 46850197880971,
+      "inventory_quantity": 10,
+      "available": true
+    },
+    {
+      "id": 8174500642955,
+      "title": "Dev Store Product",
+      "handle": "dev-store-product",
+      "vendor": "DevStore",
+      "tags": ["dev"],
+      "collection_ids": ["dev"],
+      "featured_image": null,
+      "price_cents": 2500,
+      "compare_at_price_cents": null,
+      "default_variant_id": 46850032566411,
+      "inventory_quantity": 10,
+      "available": true
+    }
+  ]
+}

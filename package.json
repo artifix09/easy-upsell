@@ -1,0 +1,23 @@
+{
+  "name": "all-about-shopify",
+  "version": "1.0.0",
+  "description": "Minimal commands for local validation.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test \"tests/**/*.test.mjs\"",
+    "smoke": "node tools/smoke-test.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1",
+    "pg": "^8.13.1",
+    "redis": "^5.12.1"
+  }
+}

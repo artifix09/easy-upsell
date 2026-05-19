@@ -1,0 +1,55 @@
+{% comment %}
+  Apex Upsell — Product page
+  -------------------------------------------------------------------------
+  Drop into the /products/{handle} template via the theme editor (usually
+  beneath the buy-box). Renders complementary product cards anchored to the
+  current product so recommendations stay relevant even when the cart is
+  empty.
+{% endcomment %}
+
+<script src="{{ 'apex-upsell.js' | asset_url }}" defer></script>
+
+<div class="apex-upsell-product" data-section-id="{{ section.id }}">
+  <apex-upsell
+    data-placement="product"
+    data-anchor-product-id="{{ product.id }}"
+    data-limit="{{ section.settings.limit | default: 3 }}"
+    data-heading="{{ section.settings.heading | escape }}"
+    data-subheading="{{ section.settings.subheading | escape }}"
+    data-add-label="{{ section.settings.add_label | escape }}"
+    data-currency="{{ shop.currency }}"
+    data-recommendations-endpoint="{{ section.settings.recommendations_endpoint }}"
+    data-events-endpoint="{{ section.settings.events_endpoint }}"
+  ></apex-upsell>
+</div>
+
+<style>
+  .apex-upsell-product {
+    max-width: {{ section.settings.max_width | default: 1080 }}px;
+    margin: {{ section.settings.margin_top | default: 48 }}px auto;
+    padding: 0 var(--page-width-margin, 16px);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Apex Upsell — Product",
+  "tag": "section",
+  "class": "apex-upsell-product-section",
+  "settings": [
+    { "type": "text",  "id": "heading",     "label": "Heading",      "default": "Frequently bought together" },
+    { "type": "text",  "id": "subheading",  "label": "Subheading",   "default": "Customers often add these along with this product" },
+    { "type": "text",  "id": "add_label",   "label": "Add button label", "default": "Add" },
+    { "type": "range", "id": "limit",       "label": "Max products", "min": 1, "max": 6, "step": 1, "default": 3 },
+    { "type": "range", "id": "max_width",   "label": "Max width (px)", "min": 600, "max": 1400, "step": 20, "default": 1080 },
+    { "type": "range", "id": "margin_top",  "label": "Top margin (px)", "min": 0, "max": 96, "step": 4, "default": 48 },
+    { "type": "header", "content": "Advanced (do not change unless instructed)" },
+    { "type": "text", "id": "recommendations_endpoint", "label": "Recommendations endpoint", "default": "/apps/hybrid/recommendations" },
+    { "type": "text", "id": "events_endpoint",          "label": "Events endpoint",          "default": "/apps/hybrid/events" }
+  ],
+  "presets": [
+    { "name": "Apex Upsell — Product" }
+  ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

@@ -1,0 +1,31 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "f2d954bbe396ac15a0899aaf820a0cfd"
+name = "Easy Upsell"
+application_url = "https://cedar-continuous-impose-confidential.trycloudflare.com/admin"
+embedded = true
+
+[webhooks]
+api_version = "2026-04"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_orders,read_products"
+optional_scopes = [ ]
+use_legacy_install_flow = false
+
+[auth]
+redirect_urls = [
+  "https://cedar-continuous-impose-confidential.trycloudflare.com/auth/callback"
+]
+
+[pos]
+embedded = true
+
+[app_proxy]
+url = "https://cedar-continuous-impose-confidential.trycloudflare.com/shopify/proxy"
+subpath = "hybrid"
+prefix = "apps"
+
+[build]
+automatically_update_urls_on_dev = true

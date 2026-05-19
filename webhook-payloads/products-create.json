@@ -1,0 +1,18 @@
+{
+  "id": 8172640100,
+  "handle": "premium-leather-belt",
+  "vendor": "Apex",
+  "tags": "belt,accessories",
+  "status": "active",
+  "image": { "src": "https://cdn.shopify.com/s/files/1/0001/products/belt.webp" },
+  "variants": [
+    {
+      "id": 44219877001,
+      "price": "45.00",
+      "compare_at_price": "60.00",
+      "inventory_quantity": 42,
+      "inventory_policy": "deny",
+      "inventory_item_id": 900001
+    }
+  ]
+}

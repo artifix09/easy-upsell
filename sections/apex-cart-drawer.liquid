@@ -1,0 +1,156 @@
+{{ 'apex-cart-drawer.css' | asset_url | stylesheet_tag }}
+{{ 'apex-cart-drawer.js' | asset_url | script_tag }}
+
+{%- assign upsell_handles = '' | split: ',' -%}
+{%- for item in cart.items -%}
+  {%- assign upsell_ref = item.product.metafields.custom.upsell_product.value -%}
+  {%- if upsell_ref != blank -%}
+    {%- assign upsell_handles = upsell_handles | push: upsell_ref.handle -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign upsell_handles = upsell_handles | uniq -%}
+
+<div
+  id="ApexCartDrawer"
+  class="apex-cart-drawer"
+  data-section-id="{{ section.id }}"
+  data-section-name="apex-cart-drawer"
+  data-upsell-candidates='{{ upsell_handles | json }}'
+  data-recommendations-endpoint="{{ section.settings.recommendations_endpoint }}"
+  data-events-endpoint="{{ section.settings.events_endpoint | default: '/apps/hybrid/events' }}"
+>
+  <div class="apex-cart-drawer__panel" role="dialog" aria-label="Cart">
+    <header class="apex-cart-drawer__header">
+      <h2 class="apex-cart-drawer__title">{{ section.settings.title }}</h2>
+      <button type="button" class="apex-cart-drawer__close" data-cart-close aria-label="Close cart">&times;</button>
+    </header>
+
+    <div class="apex-cart-drawer__body" data-cart-body>
+      {%- if cart.item_count == 0 -%}
+        <p class="apex-cart-drawer__empty">{{ section.settings.empty_text }}</p>
+      {%- else -%}
+        <ul class="apex-cart-drawer__items" role="list">
+          {%- for item in cart.items -%}
+            <li class="apex-cart-drawer__item" data-line-key="{{ item.key }}">
+              <div class="apex-cart-drawer__thumb">
+                {%- if item.image -%}
+                  {{ item.image | image_url: width: 160 | image_tag: loading: 'lazy', width: 80, height: 80, alt: item.product.title }}
+                {%- endif -%}
+              </div>
+              <div class="apex-cart-drawer__meta">
+                <p class="apex-cart-drawer__product">{{ item.product.title }}</p>
+                <p class="apex-cart-drawer__variant">{{ item.variant.title }}</p>
+                <div class="apex-cart-drawer__qty" data-qty-controls>
+                  <button type="button" class="apex-cart-drawer__qty-btn" data-qty-change="-1" aria-label="Decrease quantity">-</button>
+                  <input
+                    class="apex-cart-drawer__qty-input"
+                    type="number"
+                    min="0"
+                    value="{{ item.quantity }}"
+                    inputmode="numeric"
+                    aria-label="Quantity"
+                  >
+                  <button type="button" class="apex-cart-drawer__qty-btn" data-qty-change="1" aria-label="Increase quantity">+</button>
+                </div>
+              </div>
+              <div class="apex-cart-drawer__price">
+                {{ item.final_line_price | money }}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'upsell' -%}
+          <upsell-product
+            data-heading="{{ block.settings.heading | escape }}"
+            data-subheading="{{ block.settings.subheading | escape }}"
+            data-add-label="{{ block.settings.add_label | escape }}"
+            data-currency="{{ cart.currency.symbol }}"
+          ></upsell-product>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <footer class="apex-cart-drawer__footer">
+      <div class="apex-cart-drawer__subtotal">
+        <span>{{ section.settings.subtotal_label }}</span>
+        <strong>{{ cart.total_price | money }}</strong>
+      </div>
+      <a class="apex-cart-drawer__checkout" href="{{ routes.cart_url }}">{{ section.settings.checkout_label }}</a>
+    </footer>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Apex Cart Drawer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Drawer title",
+      "default": "Your cart"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty state text",
+      "default": "Your cart is empty."
+    },
+    {
+      "type": "text",
+      "id": "subtotal_label",
+      "label": "Subtotal label",
+      "default": "Subtotal"
+    },
+    {
+      "type": "text",
+      "id": "checkout_label",
+      "label": "Checkout label",
+      "default": "Checkout"
+    },
+    {
+      "type": "text",
+      "id": "recommendations_endpoint",
+      "label": "Recommendations endpoint",
+      "default": "/apps/hybrid/recommendations"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "upsell",
+      "name": "Cart upsell",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "You might also like"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "Curated to match your cart"
+        },
+        {
+          "type": "text",
+          "id": "add_label",
+          "label": "Add button label",
+          "default": "Add"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Apex Cart Drawer",
+      "blocks": [
+        { "type": "upsell" }
+      ]
+    }
+  ]
+}
+{% endschema %}

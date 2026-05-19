@@ -1,0 +1,12 @@
+{
+  "cart_items": [
+    {
+      "product_id": 8174500839563,
+      "variant_id": 46850197880971,
+      "quantity": 1
+    }
+  ],
+  "limit": 1,
+  "exclude_product_ids": [8174500839563],
+  "locale": "en"
+}

@@ -1,0 +1,25 @@
+# =============================================================================
+# Shopify CLI — backend web descriptor
+# -----------------------------------------------------------------------------
+# Tells `shopify app dev` how to run the Node server. The actual server
+# (server.mjs) and all its modules live one directory up at the project root,
+# so this descriptor just defers to them via `cd ..`.
+#
+# Shopify CLI takes care of:
+#   - spawning a Cloudflare quick tunnel
+#   - exporting HOST=<tunnel-url> as an env var to the child process
+#   - updating application_url + redirect_urls in shopify.app.toml AND in
+#     Partner Dashboard on every dev run
+#
+# server.mjs picks up HOST and uses it in place of APP_URL automatically.
+# =============================================================================
+
+name = "hybrid-web"
+# Single Express server is both the embedded UI host (frontend) and the
+# API/webhook handler (backend). Declaring both roles tells Shopify CLI's
+# proxy to route ALL paths to this process — without "frontend", the proxy
+# echoes "Invalid path /..." for unrecognized paths instead of forwarding.
+roles = ["backend", "frontend"]
+
+[commands]
+dev = "node ../server.mjs"

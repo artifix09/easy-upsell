@@ -1,0 +1,150 @@
+.apex-cart-drawer {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: min(420px, 100%);
+  background: var(--color-background, #f8f6f2);
+  color: var(--color-primary, #111);
+  transform: translateX(100%);
+  transition: transform 0.2s ease;
+  z-index: 50;
+}
+
+.apex-cart-drawer.is-open {
+  transform: translateX(0);
+}
+
+.apex-cart-drawer__panel {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  background: var(--hybrid-upsell-bg, var(--color-background, #f8f6f2));
+  box-shadow: -24px 0 40px rgba(0, 0, 0, 0.08);
+}
+
+.apex-cart-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 1.4rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.apex-cart-drawer__title {
+  font-family: var(--font-heading, serif);
+  font-size: 1.3rem;
+  margin: 0;
+  letter-spacing: 0.03em;
+}
+
+.apex-cart-drawer__close {
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-primary, #111);
+}
+
+.apex-cart-drawer__body {
+  padding: 1.2rem 1.4rem 1.8rem;
+  overflow-y: auto;
+}
+
+.apex-cart-drawer__empty {
+  font-family: var(--font-body, sans-serif);
+  color: var(--color-foreground, #444);
+}
+
+.apex-cart-drawer__items {
+  display: grid;
+  gap: 1.2rem;
+  margin: 0 0 1.6rem 0;
+  padding: 0;
+}
+
+.apex-cart-drawer__item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 1rem;
+  align-items: center;
+}
+
+.apex-cart-drawer__thumb img {
+  border-radius: 10px;
+  display: block;
+}
+
+.apex-cart-drawer__product {
+  font-family: var(--font-body, sans-serif);
+  margin: 0 0 0.2rem 0;
+}
+
+.apex-cart-drawer__variant {
+  font-family: var(--font-body, sans-serif);
+  font-size: 0.85rem;
+  color: var(--color-foreground, #555);
+  margin: 0 0 0.8rem 0;
+}
+
+.apex-cart-drawer__qty {
+  display: inline-flex;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.apex-cart-drawer__qty-btn {
+  border: none;
+  background: transparent;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.apex-cart-drawer__qty-input {
+  width: 40px;
+  text-align: center;
+  border: none;
+  font-family: var(--font-body, sans-serif);
+}
+
+.apex-cart-drawer__price {
+  font-family: var(--font-body, sans-serif);
+  font-size: 0.95rem;
+}
+
+.apex-cart-drawer__footer {
+  padding: 1.2rem 1.4rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.apex-cart-drawer__subtotal {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-family: var(--font-body, sans-serif);
+}
+
+.apex-cart-drawer__checkout {
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+  text-decoration: none;
+  background: var(--color-button, #111);
+  color: var(--color-button-text, #fff);
+  border-radius: 999px;
+  padding: 0.8rem 1rem;
+  font-family: var(--font-body, sans-serif);
+}
+
+upsell-product {
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .apex-cart-drawer {
+    width: 100%;
+  }
+}

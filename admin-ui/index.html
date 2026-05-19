@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hybrid Recommendations — Admin</title>
+  <link rel="preconnect" href="https://rsms.me/" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+  <link rel="stylesheet" href="/admin/static/styles.css" />
+  <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z" />
+      </svg>
+      <span>Hybrid Recommendations</span>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" data-tab="dashboard" aria-selected="true">Dashboard</button>
+      <button class="tab" data-tab="rules" aria-selected="false">Discount Rules</button>
+      <button class="tab" data-tab="billing" aria-selected="false">Billing</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ── DASHBOARD ──────────────────────────────────────────────────── -->
+    <section id="dashboard" class="panel" aria-labelledby="dashboard-title">
+      <h1 id="dashboard-title">Dashboard</h1>
+      <p class="subtitle">Past 30 days of recommendation performance.</p>
+
+      <div class="grid metrics" id="metrics">
+        <div class="card" data-skel><span class="label">Impressions</span><span class="value">—</span></div>
+        <div class="card" data-skel><span class="label">Clicks</span><span class="value">—</span></div>
+        <div class="card" data-skel><span class="label">CTR</span><span class="value">—</span></div>
+        <div class="card" data-skel><span class="label">Conversions</span><span class="value">—</span></div>
+        <div class="card" data-skel><span class="label">CVR</span><span class="value">—</span></div>
+        <div class="card" data-skel><span class="label">Revenue</span><span class="value">—</span></div>
+      </div>
+
+      <h2>System status</h2>
+      <div class="grid status" id="status-grid">
+        <div class="card status-card" id="status-installed"><span class="label">Install</span><span class="value">—</span></div>
+        <div class="card status-card" id="status-billing"><span class="label">Billing</span><span class="value">—</span></div>
+        <div class="card status-card" id="status-db"><span class="label">Database</span><span class="value">—</span></div>
+      </div>
+
+      <h2>Recommendation data</h2>
+      <div class="card seed-card">
+        <div class="seed-card__copy">
+          <div class="label">Seed from order history</div>
+          <p class="muted" id="seed-status">Pulls your last 90 days of orders to bootstrap best-sellers and co-purchase signals. Run once per install, or any time recommendations look stale.</p>
+        </div>
+        <button class="btn primary" id="seed-run">Seed now</button>
+      </div>
+    </section>
+
+    <!-- ── DISCOUNT RULES ─────────────────────────────────────────────── -->
+    <section id="rules" class="panel" hidden aria-labelledby="rules-title">
+      <div class="panel-head">
+        <div>
+          <h1 id="rules-title">Discount Rules</h1>
+          <p class="subtitle">Bundle-and-save offers attached to recommended products.</p>
+        </div>
+        <button class="btn primary" id="rule-new">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          New rule
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="rules-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Type</th>
+              <th>Value</th>
+              <th>Label</th>
+              <th>Status</th>
+              <th aria-label="Actions"></th>
+            </tr>
+          </thead>
+          <tbody id="rules-body">
+            <tr><td colspan="6" class="empty">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── BILLING ────────────────────────────────────────────────────── -->
+    <section id="billing" class="panel" hidden aria-labelledby="billing-title">
+      <h1 id="billing-title">Billing</h1>
+      <p class="subtitle">Subscription powered by Shopify Billing — no card data is handled by this app.</p>
+
+      <div class="card billing-card" id="billing-card">
+        <div>
+          <div class="label">Current plan</div>
+          <div class="value" id="billing-plan">—</div>
+          <div class="muted" id="billing-status">—</div>
+        </div>
+        <button class="btn primary" id="billing-subscribe">Start subscription</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ── RULE EDITOR DIALOG ─────────────────────────────────────────── -->
+  <dialog id="rule-dialog" aria-labelledby="rule-dialog-title">
+    <form id="rule-form" method="dialog">
+      <h2 id="rule-dialog-title">Edit rule</h2>
+      <div id="rule-form-error" class="form-error" role="alert" hidden></div>
+      <label class="product-picker">
+        <span>Product</span>
+        <input name="product_search" id="product-search" type="text" autocomplete="off" placeholder="Search by title or SKU…" />
+        <input name="product_id" id="product-id" type="hidden" required pattern="[0-9]+" />
+        <div class="picker-results" id="picker-results" hidden role="listbox" aria-label="Matching products"></div>
+        <div class="picker-selected" id="picker-selected" hidden></div>
+      </label>
+      <label>
+        <span>Type</span>
+        <select name="type" required>
+          <option value="percentage">Percentage</option>
+          <option value="fixed_amount">Fixed amount</option>
+        </select>
+      </label>
+      <label>
+        <span>Value</span>
+        <input name="value" type="number" step="0.01" min="0.01" required />
+      </label>
+      <label>
+        <span>Label (shown to shoppers)</span>
+        <input name="label" maxlength="120" placeholder="Bundle & save 10%" />
+      </label>
+      <label class="check">
+        <input name="active" type="checkbox" checked />
+        <span>Active</span>
+      </label>
+      <div class="dialog-actions">
+        <button type="button" class="btn ghost" id="rule-cancel">Cancel</button>
+        <button type="submit" class="btn primary" id="rule-save">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="/admin/static/app.js"></script>
+</body>
+</html>

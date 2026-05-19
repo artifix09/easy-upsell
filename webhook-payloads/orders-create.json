@@ -1,0 +1,7 @@
+{
+  "id": 900000001,
+  "line_items": [
+    { "product_id": 8172640100, "variant_id": 44219877001, "quantity": 2 },
+    { "product_id": 8172640200, "variant_id": 44219877055, "quantity": 1 }
+  ]
+}
